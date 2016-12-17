@@ -1,4 +1,4 @@
-defmodule Potato.Connection do
+defmodule Potato.ConnectionWorker do
   use GenServer
 
   defstruct [:accepter]

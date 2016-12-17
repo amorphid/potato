@@ -14,4 +14,6 @@ I won't be able to write a complete web server in one night, at least not someth
 
 ## First whack to-dos
 
-* Decide how ConnectionSupervisor is called
+* Implement Accepter
+* Implement Listener
+* ? Implement Conneciton Manager (need logic to recursively accept new connections)
