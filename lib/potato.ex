@@ -1,20 +1,48 @@
 defmodule Potato do
   use Application
+  use Org.Supervisor
 
-  # See http://elixir-lang.org/docs/stable/elixir/Application.html
-  # for more information on OTP Applications
+  import Supervisor.Spec, warn: false
+
+  # PUBLIC API / CLIENT
+
   def start(_type, _args) do
-    import Supervisor.Spec, warn: false
-
-    # Define workers and child supervisors to be supervised
-    children = [
-      # Starts a worker by calling: Potato.Worker.start_link(arg1, arg2, arg3)
-      # worker(Potato.Worker, [arg1, arg2, arg3]),
-    ]
-
-    # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Potato.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children(), opts())
   end
+
+  def start_child() do
+  end
+
+  # PRIVATE API / CLIENT
+
+  defp children() do
+    [
+      manager_child(),
+    ]
+  end
+
+  defp director() do
+    Potato.Director
+  end
+
+  defp manager_child() do
+    worker(manager(),
+      [ director:         director(),
+        manager:          manager(),
+        supervisor_child: supervisor_child()])
+  end
+
+  defp org_chart() do
+    [director: [
+  end
+
+  defp opts() do
+    [strategy: :one_for_one, name: director()]
+  end
+
+  defp supervisor_child() do
+    supervisor(Potato.Supervisor, [manager: manager()])
+  end
+
+
 end
